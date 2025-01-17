@@ -1,7 +1,7 @@
-import {Component, EventEmitter, Output} from '@angular/core';
+import {Component, output, signal} from '@angular/core';
 import {FormsModule} from "@angular/forms";
 
-export interface Investment{
+export interface Investment {
     initialInvestment: number,
     duration: number,
     expectedReturn: number,
@@ -20,24 +20,31 @@ export interface Investment{
 })
 export class UserInputComponent {
 
-    @Output()
-    calculate = new EventEmitter<Investment>()
 
-    enteredInitialInvestment = '0'
-    enteredAnnualInvestment = '0'
-    enteredExpectedReturn = '5'
-    enteredDuration = '5'
+    calculate = output<Investment>();
+
+    enteredInitialInvestment = signal('0')
+    enteredAnnualInvestment = signal('0')
+    enteredExpectedReturn = signal('5')
+    enteredDuration = signal('5')
 
     onSubmit() {
 
         this.calculate.emit({
 
-            initialInvestment: +this.enteredInitialInvestment,
-            duration: +this.enteredDuration,
-            expectedReturn: +this.enteredExpectedReturn,
-            annualInvestment: +this.enteredAnnualInvestment
+            initialInvestment: +this.enteredInitialInvestment(),
+            duration: +this.enteredDuration(),
+            expectedReturn: +this.enteredExpectedReturn(),
+            annualInvestment: +this.enteredAnnualInvestment()
 
         });
+
+
+        this.enteredInitialInvestment.set('0')
+        this.enteredAnnualInvestment.set('0')
+        this.enteredExpectedReturn.set('5')
+        this.enteredDuration.set('5')
+
     }
 
 }
